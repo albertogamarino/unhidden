@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unhidden — Financial Blind Spot Detector</title>
+<meta name="description" content="Unhidden reveals hidden costs, risk concentration and behavioral blind spots in your financial life.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070A;
+  --bg2:#070A10;
+  --panel:#0B1018;
+  --panel2:#101722;
+  --text:#E6EDF3;
+  --muted:#8B949E;
+  --faint:#58616D;
+  --line:rgba(230,237,243,.10);
+  --line2:rgba(230,237,243,.18);
+  --blue:#5B8CFF;
+  --blue2:#2F6BFF;
+  --violet:#7A5CFF;
+  --green:#3DDC97;
+  --red:#FF5A5F;
+  --cyan:#4DD7FF;
+  --shadow:0 34px 120px rgba(0,0,0,.58);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 16% -10%,rgba(91,140,255,.22),transparent 30%),
+    radial-gradient(circle at 92% 6%,rgba(122,92,255,.20),transparent 34%),
+    radial-gradient(circle at 50% 48%,rgba(61,220,151,.055),transparent 36%),
+    linear-gradient(180deg,var(--bg) 0%,#05070A 100%);
+  color:var(--text);
+  line-height:1.45;
+  letter-spacing:-.02em;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.22;
+  background-image:
+    linear-gradient(rgba(230,237,243,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(230,237,243,.035) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:linear-gradient(to bottom,black,transparent 76%);
+}
+a{text-decoration:none;color:inherit}
+button,input{font:inherit}
+.container{width:min(1240px,calc(100% - 48px));margin:0 auto}
+nav{
+  height:82px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+}
+.logo{
+  position:relative;
+  width:34px;
+  height:34px;
+  border-radius:11px;
+  background:rgba(230,237,243,.045);
+  border:1px solid var(--line2);
+  overflow:hidden;
+}
+.logo:before,.logo:after{
+  content:"";
+  position:absolute;
+  left:6px;
+  width:22px;
+  height:10px;
+}
+.logo:before{
+  top:7px;
+  border-radius:6px 6px 2px 2px;
+  transform:translateX(-4px);
+  background:linear-gradient(135deg,#F4F8FF,var(--blue));
+}
+.logo:after{
+  top:17px;
+  border-radius:2px 2px 6px 6px;
+  transform:translateX(4px);
+  background:linear-gradient(135deg,var(--blue),var(--violet));
+}
+.navlinks{display:flex;gap:28px;font-size:13px;color:var(--muted)}
+.navlinks a:hover{color:var(--text)}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border-radius:999px;
+  padding:12px 18px;
+  font-size:13px;
+  font-weight:750;
+  border:1px solid var(--line2);
+  background:rgba(230,237,243,.045);
+  color:var(--text);
+  cursor:pointer;
+}
+.btn.primary{
+  border:0;
+  color:white;
+  background:linear-gradient(135deg,var(--blue2),var(--violet));
+  box-shadow:0 20px 60px rgba(91,140,255,.30);
+}
+.btn:hover{transform:translateY(-1px)}
+.hero{
+  min-height:840px;
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:60px;
+  align-items:center;
+  padding:44px 0 112px;
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#C9D7FF;
+  border:1px solid rgba(91,140,255,.24);
+  background:rgba(91,140,255,.08);
+  border-radius:999px;
+  padding:8px 10px;
+  margin-bottom:22px;
+}
+.badge-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 18px var(--green);
+}
+h1{
+  font-size:84px;
+  line-height:.88;
+  letter-spacing:-.082em;
+  font-weight:900;
+  max-width:800px;
+  margin-bottom:26px;
+}
+.gradient-text{
+  background:linear-gradient(135deg,#fff,#B3C7FF 52%,#A895FF);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.lead{
+  font-size:20px;
+  color:#AAB5C3;
+  max-width:660px;
+  margin-bottom:30px;
+  line-height:1.55;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.micro{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;
+  color:var(--faint);
+  margin-top:16px;
+}
+.stage{position:relative;min-height:650px}
+.float-card{
+  position:absolute;
+  border:1px solid var(--line);
+  background:rgba(10,15,23,.68);
+  backdrop-filter:blur(18px);
+  box-shadow:var(--shadow);
+}
+.float-card.one{
+  right:-18px;
+  top:34px;
+  width:170px;
+  border-radius:22px;
+  padding:16px;
+  z-index:3;
+  transform:rotate(4deg);
+  animation:floatA 6s ease-in-out infinite;
+}
+.float-card.two{
+  left:-28px;
+  bottom:94px;
+  width:190px;
+  border-radius:22px;
+  padding:16px;
+  z-index:3;
+  transform:rotate(-5deg);
+  animation:floatB 7s ease-in-out infinite;
+}
+@keyframes floatA{50%{transform:translateY(-10px) rotate(2deg)}}
+@keyframes floatB{50%{transform:translateY(12px) rotate(-3deg)}}
+.float-label{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:9px;
+  color:var(--faint);
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.float-num{font-size:32px;font-weight:900;letter-spacing:-.06em}
+.float-copy{font-size:12px;color:var(--muted);margin-top:5px}
+.product{
+  position:absolute;
+  inset:38px 22px 0 18px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(230,237,243,.07),rgba(230,237,243,.025));
+  border-radius:34px;
+  padding:12px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px);
+  z-index:2;
+}
+.app{
+  border:1px solid var(--line);
+  background:rgba(5,7,10,.86);
+  border-radius:24px;
+  overflow:hidden;
+  height:100%;
+}
+.app-top{
+  height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  border-bottom:1px solid var(--line);
+  background:rgba(230,237,243,.025);
+}
+.window{display:flex;gap:7px}
+.window i{width:8px;height:8px;border-radius:50%;background:rgba(230,237,243,.18)}
+.app-title{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.status-chip{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:10px;
+  color:var(--green);
+  border:1px solid rgba(61,220,151,.24);
+  background:rgba(61,220,151,.07);
+  padding:6px 9px;
+  border-radius:999px;
+}
+.app-body{display:grid;grid-template-columns:172px 1fr;min-height:560px}
+.side{border-right:1px solid var(--line);padding:14px;background:rgba(230,237,243,.015)}
+.side-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 10px;
+  border-radius:12px;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:5px;
+}
+.side-item.active{
+  color:var(--text);
+  background:rgba(91,140,255,.11);
+  border:1px solid rgba(91,140,255,.18);
+}
+.pill{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--green)}
+.main-ui{padding:18px}
+.scan-line{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--muted);
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;
+  margin-bottom:14px;
+}
+.cursor{width:8px;height:14px;background:var(--blue);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.score-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,90,95,.28);
+  background:
+    radial-gradient(circle at 10% 0%,rgba(255,90,95,.17),transparent 34%),
+    linear-gradient(180deg,rgba(255,90,95,.085),rgba(230,237,243,.025));
+  border-radius:22px;
+  padding:20px;
+  margin-bottom:12px;
+}
+.score-card:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);
+  transform:translateX(-130%);
+  animation:sweep 4.2s ease-in-out infinite;
+}
+@keyframes sweep{45%,100%{transform:translateX(130%)}}
+.score-label{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:10px;
+  color:var(--red);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.score-row{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}
+.score{
+  font-size:88px;
+  line-height:.78;
+  font-weight:900;
+  letter-spacing:-.08em;
+  animation:scoreIn 1.2s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes scoreIn{0%{filter:blur(10px);opacity:0;transform:translateY(18px)}100%{filter:blur(0);opacity:1;transform:translateY(0)}}
+.score small{font-size:28px;color:var(--muted)}
+.score-copy{text-align:right;font-size:14px;font-weight:800;color:var(--text)}
+.findings{display:grid;gap:9px}
+.finding{
+  border:1px solid var(--line);
+  background:rgba(230,237,243,.035);
+  border-radius:16px;
+  padding:13px;
+  display:grid;
+  grid-template-columns:10px 1fr auto;
+  gap:12px;
+  align-items:start;
+}
+.finding-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--blue);
+  margin-top:6px;
+  box-shadow:0 0 14px rgba(91,140,255,.8);
+}
+.finding h3{font-size:13px;margin-bottom:3px}
+.finding p{font-size:12px;color:var(--muted)}
+.code{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--faint)}
+.prompt{
+  margin-top:13px;
+  border:1px solid var(--line);
+  background:rgba(230,237,243,.03);
+  border-radius:999px;
+  padding:11px 13px;
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:12px;
+}
+section{padding:108px 0;border-top:1px solid var(--line)}
+.section-head{max-width:850px;margin-bottom:44px}
+.kicker{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;
+  color:var(--blue);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.section-title{
+  font-size:60px;
+  line-height:.96;
+  letter-spacing:-.065em;
+  font-weight:900;
+  margin-bottom:18px;
+}
+.section-sub{
+  font-size:18px;
+  color:var(--muted);
+  max-width:740px;
+  line-height:1.6;
+}
+.overwhelm{
+  position:relative;
+  min-height:560px;
+  border:1px solid var(--line);
+  background:
+    radial-gradient(circle at 20% 10%,rgba(91,140,255,.12),transparent 30%),
+    linear-gradient(180deg,rgba(230,237,243,.045),rgba(230,237,243,.018));
+  border-radius:34px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.data-strip{
+  position:absolute;
+  left:-5%;
+  right:-5%;
+  height:48px;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  gap:30px;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;
+  color:var(--faint);
+  background:rgba(5,7,10,.55);
+  white-space:nowrap;
+}
+.strip1{top:70px;transform:rotate(-2deg)}
+.strip2{bottom:88px;transform:rotate(2deg)}
+.data-strip span{animation:marquee 18s linear infinite}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-520px)}}
+.center-diagnosis{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(640px,84%);
+  border:1px solid rgba(91,140,255,.26);
+  background:rgba(10,15,23,.82);
+  backdrop-filter:blur(18px);
+  border-radius:30px;
+  padding:28px;
+}
+.center-diagnosis h3{font-size:32px;letter-spacing:-.045em;margin-bottom:12px}
+.center-diagnosis p{color:var(--muted);font-size:15px;line-height:1.6}
+.diag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.diag{border:1px solid var(--line);border-radius:16px;background:rgba(230,237,243,.035);padding:13px}
+.diag strong{display:block;font-size:20px;margin-bottom:4px}
+.diag span{font-size:11px;color:var(--muted)}
+.outputs{display:grid;grid-template-columns:1.25fr .85fr .85fr;gap:14px}
+.output{
+  min-height:280px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(230,237,243,.05),rgba(230,237,243,.02));
+  border-radius:26px;
+  padding:22px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.output.hero-output{min-height:360px}
+.output-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:10px;
+  color:var(--faint);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.output-num{
+  font-size:72px;
+  line-height:.85;
+  font-weight:900;
+  letter-spacing:-.075em;
+  margin:26px 0 14px;
+}
+.hero-output .output-num{font-size:104px}
+.output p{color:var(--muted);font-size:14px;line-height:1.55}
+.red{color:var(--red)}.green{color:var(--green)}.blue{color:var(--blue)}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.flow-card{
+  min-height:210px;
+  border:1px solid var(--line);
+  background:rgba(230,237,243,.03);
+  border-radius:24px;
+  padding:21px;
+}
+.flow-num{font-family:"IBM Plex Mono",monospace;color:var(--blue);font-size:11px;margin-bottom:44px}
+.flow-card h3{font-size:18px;margin-bottom:8px}
+.flow-card p{font-size:14px;color:var(--muted);line-height:1.55}
+.chat-section{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:center}
+.chatbox{
+  border:1px solid var(--line);
+  background:rgba(5,7,10,.62);
+  border-radius:30px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.msg{max-width:86%;border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px;font-size:14px}
+.msg.user{margin-left:auto;background:rgba(91,140,255,.12)}
+.msg.ai{background:rgba(230,237,243,.04)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chips span{
+  font-size:12px;
+  color:var(--text);
+  border:1px solid var(--line2);
+  border-radius:999px;
+  padding:8px 10px;
+  background:rgba(230,237,243,.035);
+}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.trust-card{
+  border:1px solid var(--line);
+  background:rgba(230,237,243,.03);
+  border-radius:24px;
+  padding:22px;
+  min-height:160px;
+}
+.trust-card h3{font-size:18px;margin-bottom:9px}
+.trust-card p{font-size:14px;color:var(--muted);line-height:1.55}
+.cta{
+  border:1px solid rgba(91,140,255,.24);
+  background:
+    radial-gradient(circle at 10% 0%,rgba(91,140,255,.16),transparent 30%),
+    radial-gradient(circle at 90% 0%,rgba(122,92,255,.12),transparent 28%),
+    linear-gradient(180deg,rgba(230,237,243,.055),rgba(230,237,243,.02));
+  border-radius:34px;
+  padding:52px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:28px;
+  align-items:center;
+}
+.cta h2{font-size:54px;line-height:.96;letter-spacing:-.065em;font-weight:900;margin-bottom:14px}
+.cta p{font-size:17px;color:var(--muted);max-width:690px}
+.footer{
+  padding:42px 0 70px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  color:var(--faint);
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;
+}
+@media(max-width:1080px){
+  .hero,.chat-section,.cta{grid-template-columns:1fr}
+  .stage{min-height:660px}
+  h1{font-size:64px}
+  .section-title{font-size:46px}
+  .outputs,.flow,.trust{grid-template-columns:1fr}
+  .navlinks{display:none}
+}
+@media(max-width:700px){
+  .container{width:min(100% - 36px,1240px)}
+  nav{height:74px}
+  .hero{min-height:auto;padding:34px 0 82px}
+  h1{font-size:47px}
+  .lead{font-size:18px}
+  .stage{min-height:auto}
+  .product{position:relative;inset:auto}
+  .float-card{display:none}
+  .app-body{grid-template-columns:1fr}
+  .side{display:none}
+  .score-row{display:block}
+  .score-copy{text-align:left;margin-top:12px}
+  .diag-grid{grid-template-columns:1fr}
+  .hero-output .output-num{font-size:70px}
+  .cta{padding:30px}
+  .cta h2{font-size:38px}
+  .footer{display:block}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <nav>
+    <div class="brand"><div class="logo"></div><span>Unhidden</span></div>
+    <div class="navlinks">
+      <a href="#system">System</a>
+      <a href="#outputs">Outputs</a>
+      <a href="#flow">Flow</a>
+      <a href="#trust">Trust</a>
+    </div>
+    <a href="#access" class="btn">Early access</a>
+  </nav>
+
+  <main class="hero">
+    <div>
+      <div class="badge"><span class="badge-dot"></span> Financial blind spot detector</div>
+      <h1>You’re making financial decisions with <span class="gradient-text">missing information.</span></h1>
+      <p class="lead">Most losses don’t come from markets. They come from structure, costs, and decisions you never questioned. Unhidden reveals what your financial life is actually doing.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#access">Find your blind spots</a>
+        <a class="btn" href="#system">Watch the system</a>
+      </div>
+      <p class="micro">PRIVATE BY DESIGN · NO PRODUCT PUSHING · NOT FINANCIAL ADVICE</p>
+    </div>
+
+    <div class="stage">
+      <div class="float-card one">
+        <div class="float-label">Exposure anomaly</div>
+        <div class="float-num blue">58.4%</div>
+        <div class="float-copy">single-country concentration</div>
+      </div>
+      <div class="float-card two">
+        <div class="float-label">Cash-flow leak</div>
+        <div class="float-num green">€780</div>
+        <div class="float-copy">restaurants last month</div>
+      </div>
+
+      <div class="product">
+        <div class="app">
+          <div class="app-top">
+            <div class="window"><i></i><i></i><i></i></div>
+            <div class="app-title">Unhidden / active scan</div>
+            <div class="status-chip">LIVE</div>
+          </div>
+          <div class="app-body">
+            <aside class="side">
+              <div class="side-item active">Score <span class="pill">LIVE</span></div>
+              <div class="side-item">Costs</div>
+              <div class="side-item">Risk</div>
+              <div class="side-item">Spending</div>
+              <div class="side-item">Plan</div>
+            </aside>
+            <div class="main-ui">
+              <div class="scan-line"><span class="cursor"></span> Detecting structural inconsistencies</div>
+              <div class="score-card">
+                <div class="score-label">Financial Blind Spot Score</div>
+                <div class="score-row">
+                  <div class="score">62<small>/100</small></div>
+                  <div class="score-copy">Structurally inefficient.<br>Not because of the market.</div>
+                </div>
+              </div>
+              <div class="findings">
+                <div class="finding">
+                  <div class="finding-dot"></div>
+                  <div><h3>You are paying more than necessary.</h3><p>Cost drag is visible across product layers.</p></div>
+                  <div class="code">COST</div>
+                </div>
+                <div class="finding">
+                  <div class="finding-dot"></div>
+                  <div><h3>Your diversification is less real than it looks.</h3><p>Product count is hiding concentration.</p></div>
+                  <div class="code">RISK</div>
+                </div>
+                <div class="finding">
+                  <div class="finding-dot"></div>
+                  <div><h3>Your setup contradicts your stated objective.</h3><p>Your structure says something different from your goal.</p></div>
+                  <div class="code">GAP</div>
+                </div>
+              </div>
+              <div class="prompt"><span>Ask: “What should I fix first?”</span><span>↵</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="system">
+    <div class="section-head">
+      <div class="kicker">The system view</div>
+      <h2 class="section-title">Your finances are not a dashboard. They are a set of hidden relationships.</h2>
+      <p class="section-sub">Unhidden reads those relationships at once: product structure, cost drag, exposure, cash flow, behavior, and stated objectives.</p>
+    </div>
+    <div class="overwhelm">
+      <div class="data-strip strip1">
+        <span>FUND TER 1.78% · COUNTRY EXPOSURE 58.4% · CERTIFICATE LOCKUP · SUBSCRIPTIONS +21% · CASH FLOW LEAK · OBJECTIVE MISMATCH · </span>
+        <span>FUND TER 1.78% · COUNTRY EXPOSURE 58.4% · CERTIFICATE LOCKUP · SUBSCRIPTIONS +21% · CASH FLOW LEAK · OBJECTIVE MISMATCH · </span>
+      </div>
+      <div class="data-strip strip2">
+        <span>ETF OVERLAP · HIDDEN COST DRAG · RISK CLUSTER · SPENDING SPIKE · LOW SAVINGS RATE · STRUCTURAL INEFFICIENCY · </span>
+        <span>ETF OVERLAP · HIDDEN COST DRAG · RISK CLUSTER · SPENDING SPIKE · LOW SAVINGS RATE · STRUCTURAL INEFFICIENCY · </span>
+      </div>
+      <div class="center-diagnosis">
+        <div class="kicker">Diagnosis complete</div>
+        <h3>Your setup is not broken. It is misaligned.</h3>
+        <p>The problem is rarely one bad product or one bad month. It is the accumulation of small blind spots that nobody aggregates for you.</p>
+        <div class="diag-grid">
+          <div class="diag"><strong class="red">€39,842</strong><span>estimated long-term drag</span></div>
+          <div class="diag"><strong class="blue">58.4%</strong><span>single-country exposure</span></div>
+          <div class="diag"><strong class="green">3</strong><span>actions before adding risk</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="outputs">
+    <div class="section-head">
+      <div class="kicker">Sample outputs</div>
+      <h2 class="section-title">The first answer should be uncomfortable — usefully.</h2>
+      <p class="section-sub">No decorative charts. No generic financial education. Just the blind spots, their impact, and what deserves attention first.</p>
+    </div>
+    <div class="outputs">
+      <div class="output hero-output">
+        <div class="output-top"><span>Avoidable drag</span><span>COST</span></div>
+        <div><div class="output-num red">€39,842</div><p>Estimated long-term cost of inefficient products, high fees and structural complexity.</p></div>
+      </div>
+      <div class="output">
+        <div class="output-top"><span>Exposure</span><span>RISK</span></div>
+        <div><div class="output-num blue">58.4%</div><p>Exposure concentrated in one country despite a portfolio that appears diversified.</p></div>
+      </div>
+      <div class="output">
+        <div class="output-top"><span>Spending leak</span><span>CASH</span></div>
+        <div><div class="output-num green">€780</div><p>Restaurants last month. Not a moral judgment: a cash-flow signal.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="flow">
+    <div class="section-head">
+      <div class="kicker">First 60 seconds</div>
+      <h2 class="section-title">Upload. Detect. Decide.</h2>
+      <p class="section-sub">The product experience is designed to reveal value before the user is asked to understand the product.</p>
+    </div>
+    <div class="flow">
+      <div class="flow-card"><div class="flow-num">01</div><h3>Minimal profile</h3><p>Age, objective, confidence. Only what cannot be inferred.</p></div>
+      <div class="flow-card"><div class="flow-num">02</div><h3>Document scan</h3><p>Portfolio reports, bank statements, card statements.</p></div>
+      <div class="flow-card"><div class="flow-num">03</div><h3>Blind spot score</h3><p>A clear signal that creates immediate personal relevance.</p></div>
+      <div class="flow-card"><div class="flow-num">04</div><h3>Action sequence</h3><p>What to keep, reduce, remove, and monitor first.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="chat-section">
+      <div>
+        <div class="kicker">Chat interface</div>
+        <h2 class="section-title">Ask your money what is really going on.</h2>
+        <p class="section-sub">The interface is not a report archive. It is a continuous conversation with your financial reality.</p>
+      </div>
+      <div class="chatbox">
+        <div class="msg user">Is my portfolio safe?</div>
+        <div class="msg ai">Not in the way you expect. The issue is not only volatility — it is structure: high costs, country concentration and products that reduce flexibility.</div>
+        <div class="msg user">What should I fix first?</div>
+        <div class="msg ai">Start with costs. It is the most measurable inefficiency and can be improved without taking more risk.</div>
+        <div class="chips"><span>Show hidden costs</span><span>Build action plan</span><span>Analyze spending leaks</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="trust">
+    <div class="section-head">
+      <div class="kicker">Trust layer</div>
+      <h2 class="section-title">Your data should not become someone else’s product.</h2>
+      <p class="section-sub">Financial clarity requires trust. The product should be built around privacy, transparency and user control from day one.</p>
+    </div>
+    <div class="trust">
+      <div class="trust-card"><h3>Private by design</h3><p>Your financial data is used to generate your diagnosis, not to sell you products.</p></div>
+      <div class="trust-card"><h3>No product pushing</h3><p>The system identifies issues and decision paths. It is not a distribution channel for funds, cards or accounts.</p></div>
+      <div class="trust-card"><h3>You stay in control</h3><p>The output clarifies trade-offs. It does not automate financial decisions without your consent.</p></div>
+    </div>
+  </section>
+
+  <section id="access">
+    <div class="cta">
+      <div>
+        <div class="kicker">Early access</div>
+        <h2>See your score before you make another financial decision.</h2>
+        <p>Upload your reports. Understand hidden costs, risk concentration, spending leaks and the decisions that deserve attention first.</p>
+      </div>
+      <a class="btn primary" href="mailto:hello@unhidden.example?subject=Unhidden%20early%20access">Request early access</a>
+    </div>
+  </section>
+
+  <div class="footer">
+    <div>UNHIDDEN · FINANCIAL BLIND SPOTS, REVEALED</div>
+    <div>PROTOTYPE LANDING · NOT FINANCIAL ADVICE</div>
+  </div>
+</div>
+</body>
+</html>
