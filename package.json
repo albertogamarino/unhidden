@@ -1,9 +1,0 @@
-{
-  "name": "unhidden-api-demo",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "openai": "^6.0.0"
-  }
-}
