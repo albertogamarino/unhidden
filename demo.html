@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unhidden — Pitch Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070A;
+  --panel:#0B1018;
+  --panel2:#101722;
+  --text:#E6EDF3;
+  --muted:#8B949E;
+  --faint:#58616D;
+  --line:rgba(230,237,243,.10);
+  --line2:rgba(230,237,243,.18);
+  --blue:#5B8CFF;
+  --blue2:#2F6BFF;
+  --violet:#7A5CFF;
+  --green:#3DDC97;
+  --red:#FF5A5F;
+  --amber:#FDBA53;
+  --shadow:0 34px 120px rgba(0,0,0,.58);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Inter,system-ui,sans-serif;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 12% -10%,rgba(91,140,255,.22),transparent 30%),
+    radial-gradient(circle at 92% 4%,rgba(122,92,255,.18),transparent 34%),
+    radial-gradient(circle at 50% 60%,rgba(61,220,151,.045),transparent 34%),
+    linear-gradient(180deg,var(--bg),#05070A);
+  color:var(--text);
+  letter-spacing:-.02em;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.20;
+  background-image:linear-gradient(rgba(230,237,243,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(230,237,243,.035) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+button,input,textarea{font:inherit}
+.app{width:min(1400px,calc(100% - 42px));margin:0 auto;padding:22px 0 28px;position:relative;z-index:1}
+nav{height:64px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.brand{display:flex;gap:12px;align-items:center;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.logo{position:relative;width:34px;height:34px;border-radius:11px;background:rgba(230,237,243,.045);border:1px solid var(--line2);overflow:hidden}
+.logo:before,.logo:after{content:"";position:absolute;left:6px;width:22px;height:10px}
+.logo:before{top:7px;border-radius:6px 6px 2px 2px;transform:translateX(-4px);background:linear-gradient(135deg,#F4F8FF,var(--blue))}
+.logo:after{top:17px;border-radius:2px 2px 6px 6px;transform:translateX(4px);background:linear-gradient(135deg,var(--blue),var(--violet))}
+.status{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--green);border:1px solid rgba(61,220,151,.24);background:rgba(61,220,151,.07);border-radius:999px;padding:8px 11px}
+
+.layout{display:grid;grid-template-columns:360px minmax(0,1fr) 390px;gap:14px}
+.panel{
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(230,237,243,.055),rgba(230,237,243,.022));
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.left,.main,.right{min-height:calc(100vh - 126px)}
+.left,.right{padding:18px}.main{padding:24px}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--blue);letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px}
+h1{font-size:50px;line-height:.92;font-weight:900;letter-spacing:-.07em;margin-bottom:12px}
+.subtitle{color:var(--muted);font-size:15px;line-height:1.55;max-width:760px;margin-bottom:18px}
+.mode-grid{display:grid;gap:10px;margin-bottom:18px}
+.mode{
+  text-align:left;border:1px solid var(--line);background:rgba(230,237,243,.03);
+  border-radius:18px;padding:14px;color:var(--muted);cursor:pointer;transition:.16s;
+}
+.mode:hover,.mode.active{border-color:rgba(91,140,255,.42);background:rgba(91,140,255,.10);color:#fff}
+.mode strong{display:block;color:#fff;font-size:14px;margin-bottom:4px}.mode span{font-size:12px;line-height:1.4}
+.profile,.upload,.input-card{border:1px solid var(--line);background:rgba(230,237,243,.03);border-radius:18px;padding:14px;margin-bottom:14px}
+.row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(230,237,243,.07);padding:8px 0;font-size:13px}.row:last-child{border-bottom:0}.row span:first-child{color:var(--muted)}.row span:last-child{text-align:right;color:#fff;font-weight:650}
+.drop{border:1px dashed rgba(91,140,255,.42);background:rgba(91,140,255,.075);border-radius:16px;padding:15px;color:#D8E4FF;font-size:13px;line-height:1.45;margin-bottom:10px}
+.file-list{display:grid;gap:8px}
+.file{border:1px solid var(--line);border-radius:13px;padding:10px;background:rgba(230,237,243,.025);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px}.file strong{color:#fff}
+textarea{
+  width:100%;min-height:120px;resize:vertical;
+  border:1px solid var(--line2);background:rgba(5,7,10,.56);color:#fff;
+  border-radius:16px;padding:14px;font-size:14px;line-height:1.45;outline:none;
+}
+.btn{border:1px solid var(--line2);background:rgba(230,237,243,.045);color:var(--text);border-radius:999px;padding:11px 14px;font-size:13px;font-weight:750;cursor:pointer}
+.btn.primary{border:0;color:white;background:linear-gradient(135deg,var(--blue2),var(--violet));box-shadow:0 20px 60px rgba(91,140,255,.22)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.small{font-family:"IBM Plex Mono",monospace;color:var(--faint);font-size:10px;line-height:1.5;margin-top:10px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.step{border:1px solid var(--line);background:rgba(230,237,243,.03);border-radius:16px;padding:12px}.step strong{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}.step span{font-size:12px;color:var(--muted)}
+.hero-card{
+  position:relative;overflow:hidden;border:1px solid rgba(255,90,95,.28);
+  background:radial-gradient(circle at 10% 0%,rgba(255,90,95,.17),transparent 34%),linear-gradient(180deg,rgba(255,90,95,.085),rgba(230,237,243,.025));
+  border-radius:26px;padding:22px;margin-bottom:14px;
+}
+.hero-card:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);transform:translateX(-130%);animation:sweep 4.2s ease-in-out infinite}@keyframes sweep{45%,100%{transform:translateX(130%)}}
+.score-label{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--red);letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px}
+.score-row{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}.score{font-size:84px;line-height:.78;font-weight:900;letter-spacing:-.08em}.score small{font-size:28px;color:var(--muted)}.score-copy{text-align:right;font-size:14px;font-weight:800}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tag{border:1px solid var(--line);background:rgba(230,237,243,.04);border-radius:999px;padding:8px 10px;font-size:12px;color:#DCE7F6}
+.analysis{border:1px solid var(--line);background:rgba(230,237,243,.035);border-radius:20px;padding:18px;min-height:220px;white-space:pre-wrap;font-size:14px;line-height:1.55;color:#D3DCE8}
+.loading{display:none;border:1px solid var(--line);background:rgba(230,237,243,.03);border-radius:18px;padding:15px;margin-bottom:14px}
+.loading.active{display:block}.scan-item{display:flex;align-items:center;gap:10px;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:11px;margin:9px 0}
+.pulse{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(61,220,151,.6);animation:pulse 1.25s infinite}@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(61,220,151,0)}100%{box-shadow:0 0 0 0 rgba(61,220,151,0)}}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px}.metric{border:1px solid var(--line);background:rgba(230,237,243,.03);border-radius:16px;padding:12px}.metric span{display:block;font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}.metric strong{font-size:22px;letter-spacing:-.05em}
+.plan{display:grid;gap:10px;margin-bottom:20px}.plan-step{border:1px solid var(--line);background:rgba(230,237,243,.03);border-radius:17px;padding:14px}.plan-step strong{display:block;font-size:14px;margin-bottom:4px}.plan-step p{font-size:12px;color:var(--muted);line-height:1.5}
+.chat{height:320px;overflow:auto;display:flex;flex-direction:column;gap:9px;padding-right:4px}.msg{max-width:90%;border:1px solid var(--line);border-radius:18px;padding:12px 14px;font-size:13px;line-height:1.45;white-space:pre-wrap}.msg.user{align-self:flex-end;background:rgba(91,140,255,.12)}.msg.ai{align-self:flex-start;background:rgba(230,237,243,.04)}
+.chat-input{margin-top:12px;border:1px solid var(--line);background:rgba(230,237,243,.03);border-radius:999px;padding:7px;display:flex;gap:8px}.chat-input input{flex:1;background:transparent;border:0;outline:0;color:#fff;padding:0 10px;font-size:13px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.quick button{border:1px solid var(--line);background:rgba(230,237,243,.03);color:var(--muted);border-radius:999px;padding:8px 10px;font-size:11px;cursor:pointer}.quick button:hover{color:#fff;border-color:var(--line2)}
+@media(max-width:1150px){.layout{grid-template-columns:1fr}.left,.main,.right{min-height:auto}.steps{grid-template-columns:1fr 1fr}.chat{height:300px}}
+@media(max-width:640px){.app{width:min(100% - 28px,1400px)}h1{font-size:38px}.steps,.metrics{grid-template-columns:1fr}.score-row{display:block}.score-copy{text-align:left;margin-top:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav>
+    <div class="brand"><div class="logo"></div><span>Unhidden Demo</span></div>
+    <div class="status">LIVE AI · SIMULATED DATA</div>
+  </nav>
+
+  <div class="layout">
+    <aside class="panel left">
+      <div class="kicker">Sample scenario</div>
+      <div class="mode-grid">
+        <button class="mode active" data-mode="products"><strong>Product & fee blind spots</strong><span>Funds, certificates, card fees, recurring banking costs.</span></button>
+        <button class="mode" data-mode="structure"><strong>Structure that doesn’t add up</strong><span>Fragmented accounts, overlapping holdings, unclear risk exposure.</span></button>
+        <button class="mode" data-mode="cashflow"><strong>Cash-flow & habits</strong><span>Recurring patterns that quietly reduce flexibility.</span></button>
+      </div>
+
+      <div class="kicker">Profile</div>
+      <div class="profile" id="profile"></div>
+
+      <div class="kicker">Simulated upload</div>
+      <div class="upload">
+        <div class="drop"><strong>Drop financial documents</strong><br>Portfolio report, bank statement, card statement. This demo simulates extraction from uploaded documents.</div>
+        <div class="file-list" id="files"></div>
+        <div class="small">No real documents are uploaded in this prototype.</div>
+      </div>
+    </aside>
+
+    <main class="panel main">
+      <div class="kicker">Financial diagnosis</div>
+      <h1 id="mainTitle">Your financial life looks fine. But it doesn’t add up.</h1>
+      <p class="subtitle" id="subtitle">Run a simulated scan, then ask follow-up questions through the live AI layer.</p>
+
+      <div class="steps">
+        <div class="step"><strong>01 Profile</strong><span>Goal, horizon, confidence.</span></div>
+        <div class="step"><strong>02 Documents</strong><span>Products, fees, transactions.</span></div>
+        <div class="step"><strong>03 Signals</strong><span>Costs, structure, habits.</span></div>
+        <div class="step"><strong>04 Diagnosis</strong><span>What to check next.</span></div>
+      </div>
+
+      <div class="input-card">
+        <textarea id="situation"></textarea>
+        <div class="actions">
+          <button class="btn primary" id="runBtn">Run diagnosis</button>
+          <button class="btn" id="fillBtn">Use sample</button>
+        </div>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="scan-item"><span class="pulse"></span>Extracting financial signals</div>
+        <div class="scan-item"><span class="pulse"></span>Mapping product and cost layers</div>
+        <div class="scan-item"><span class="pulse"></span>Detecting structural inconsistencies</div>
+        <div class="scan-item"><span class="pulse"></span>Preparing diagnosis</div>
+      </div>
+
+      <div class="hero-card">
+        <div class="score-label">Blind Spot Score</div>
+        <div class="score-row">
+          <div class="score" id="score">--<small>/100</small></div>
+          <div class="score-copy" id="scoreCopy">Run diagnosis to reveal the pattern.</div>
+        </div>
+      </div>
+
+      <div class="tags" id="tags"></div>
+      <div class="analysis" id="analysis">Diagnosis will appear here.</div>
+    </main>
+
+    <aside class="panel right">
+      <div class="kicker">Priority actions</div>
+      <div class="plan" id="plan"></div>
+
+      <div class="kicker">Signals</div>
+      <div class="metrics" id="metrics"></div>
+
+      <div class="kicker">Ask Unhidden</div>
+      <div class="chat" id="chat"></div>
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Ask a follow-up…" />
+        <button class="btn primary" id="sendBtn">Send</button>
+      </div>
+      <div class="quick">
+        <button data-q="What should I check first?">What first?</button>
+        <button data-q="Where are costs likely hidden?">Hidden costs?</button>
+        <button data-q="What would make this more efficient?">Improve?</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const scenarios = {
+  products: {
+    title:"Your products look reasonable. Their costs may not.",
+    subtitle:"The demo simulates a scan across portfolio products, banking charges and underused benefits.",
+    sample:"I have about 140k invested through my bank. I hold several funds and one certificate. I also pay for a premium card but I rarely use the benefits. I don’t know what the total cost of my setup is.",
+    profile:{Goal:"Cost clarity",Horizon:"Medium-long",Confidence:"Medium",Data:"Portfolio + bank + card"},
+    files:[["Portfolio_Report.pdf","funds, certificate"],["Card_Statement.pdf","fees, benefits"],["Bank_Statement.pdf","recurring charges"]],
+    plan:[["Aggregate total cost","Look across TER, management layers, product wrappers and recurring banking fees."],["Test value received","Every product or service should justify its cost through a visible benefit."],["Review complexity","Complexity should earn its place. If it does not, it becomes noise."]],
+    metrics:[["Fee visibility","Low"],["Product layers","4"],["Unused benefits","Likely"],["Priority","Costs"]]
+  },
+  structure: {
+    title:"Your diversification may exist on paper. Not in behavior.",
+    subtitle:"The demo simulates a look-through across accounts, products and underlying exposure.",
+    sample:"I have multiple investment accounts, several ETFs and funds, and I feel diversified because I own many instruments. I’m not sure whether the risk is actually spread out.",
+    profile:{Goal:"Preserve and grow",Horizon:"Long",Confidence:"High",Data:"Portfolio report"},
+    files:[["Broker_Report.pdf","holdings"],["Bank_Portfolio.pdf","funds"],["Risk_Profile.pdf","objective"]],
+    plan:[["Map real exposure","Look through product names and reconstruct geography, sector, currency and issuer exposure."],["Find overlaps","Check whether different holdings behave for the same reasons."],["Align with objective","The structure should reflect what the money is supposed to do."]],
+    metrics:[["Holdings","12"],["Overlap","Possible"],["Concentration","To verify"],["Priority","Structure"]]
+  },
+  cashflow: {
+    title:"Nothing looks excessive. The pattern may.",
+    subtitle:"The demo simulates recurring spending and lifestyle patterns against future flexibility.",
+    sample:"I earn well and I don’t feel reckless, but I still don’t save as much as expected. I have many subscriptions, restaurants, travel and card expenses that don’t look huge individually.",
+    profile:{Goal:"Build flexibility",Horizon:"Ongoing",Confidence:"Low-medium",Data:"Bank + card statements"},
+    files:[["Card_Statement.pdf","restaurants, travel"],["Bank_Statement.pdf","subscriptions"],["Monthly_Cashflow.csv","income/spend"]],
+    plan:[["Establish baseline","Compare categories against your own normal, not generic budgets."],["Separate useful from automatic","Keep what creates value. Remove what continues by inertia."],["Protect flexibility","Define what must become savings or resilience before discretionary spending."]],
+    metrics:[["Recurring","Rising"],["Baseline drift","+18%"],["Flexibility","Medium"],["Priority","Habits"]]
+  }
+};
+
+let current = "products";
+let lastDiagnosis = "";
+
+function esc(s){return String(s || "").replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
+
+function computeSignals(text){
+  const t = (text || "").toLowerCase();
+  let points = 46;
+  const tags = [];
+  const add = (tag, n) => { if(!tags.includes(tag)) tags.push(tag); points += n; };
+  if(/fund|certificate|ter|fee|cost|bank|card|premium|commission|commissioni/.test(t)) add("Hidden fees", 10);
+  if(/multiple|several|many|fragment|account|accounts|bank/.test(t)) add("Fragmentation", 8);
+  if(/etf|portfolio|invest|holding|diversif|risk/.test(t)) add("Structure risk", 9);
+  if(/subscription|restaurant|travel|spend|cash|save|saving|expenses/.test(t)) add("Behavior pattern", 7);
+  if(/don.t know|not sure|unclear|don't know|feel|rarely/.test(t)) add("Low visibility", 8);
+  if(tags.length === 0){tags.push("Low visibility","Decision quality"); points += 9;}
+  points = Math.min(86, Math.max(42, points));
+  return {score:points,tags};
+}
+
+function renderScenario(){
+  const s = scenarios[current];
+  document.getElementById("mainTitle").textContent = s.title;
+  document.getElementById("subtitle").textContent = s.subtitle;
+  document.getElementById("situation").value = s.sample;
+  document.getElementById("profile").innerHTML = Object.entries(s.profile).map(([k,v]) => `<div class="row"><span>${k}</span><span>${v}</span></div>`).join("");
+  document.getElementById("files").innerHTML = s.files.map(f => `<div class="file"><strong>${f[0]}</strong><span>${f[1]}</span></div>`).join("");
+  document.getElementById("plan").innerHTML = s.plan.map((p,i) => `<div class="plan-step"><strong>${i+1}. ${p[0]}</strong><p>${p[1]}</p></div>`).join("");
+  document.getElementById("metrics").innerHTML = s.metrics.map(m => `<div class="metric"><span>${m[0]}</span><strong>${m[1]}</strong></div>`).join("");
+  document.querySelectorAll(".mode").forEach(b => b.classList.toggle("active", b.dataset.mode === current));
+  resetChat();
+}
+
+function resetChat(){
+  document.getElementById("chat").innerHTML = `<div class="msg ai">Run the diagnosis, then ask what to check first, where costs are likely hidden, or what would make the setup more efficient.</div>`;
+}
+
+async function callAI(question, mode="analysis"){
+  const context = {
+    scenario: current,
+    profile: scenarios[current].profile,
+    metrics: scenarios[current].metrics,
+    priorityPlan: scenarios[current].plan,
+    lastDiagnosis
+  };
+  const res = await fetch("/api/chat", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({question, context, mode})
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error(JSON.stringify(data));
+  return data.answer || "No response.";
+}
+
+async function runDiagnosis(){
+  const text = document.getElementById("situation").value.trim();
+  if(!text) return;
+  const signals = computeSignals(text);
+  document.getElementById("score").innerHTML = signals.score + "<small>/100</small>";
+  document.getElementById("scoreCopy").innerHTML = signals.score > 70 ? "High blind-spot density.<br>Worth reviewing before decisions." : "Moderate blind-spot density.<br>Several signals deserve review.";
+  document.getElementById("tags").innerHTML = signals.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("");
+  const loading = document.getElementById("loading");
+  loading.classList.add("active");
+  document.getElementById("analysis").textContent = "Analyzing...";
+  try{
+    const prompt = `Analyze this financial situation through Unhidden's lens. Situation: ${text}. Detected score: ${signals.score}/100. Detected tags: ${signals.tags.join(", ")}.`;
+    const answer = await callAI(prompt, "analysis");
+    lastDiagnosis = answer;
+    document.getElementById("analysis").textContent = answer;
+    addMsg("ai", "Diagnosis complete. Ask a follow-up question.");
+  }catch(e){
+    document.getElementById("analysis").textContent = "Connection error: " + e.message;
+  }finally{
+    loading.classList.remove("active");
+  }
+}
+
+function addMsg(role, text){
+  const chat = document.getElementById("chat");
+  chat.innerHTML += `<div class="msg ${role === "user" ? "user" : "ai"}">${esc(text)}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function sendChat(q){
+  const question = q || document.getElementById("chatInput").value.trim();
+  if(!question) return;
+  addMsg("user", question);
+  document.getElementById("chatInput").value = "";
+  try{
+    const answer = await callAI(question, "chat");
+    addMsg("ai", answer);
+  }catch(e){
+    addMsg("ai", "Connection error: " + e.message);
+  }
+}
+
+document.querySelectorAll(".mode").forEach(b => b.addEventListener("click", () => { current = b.dataset.mode; renderScenario(); }));
+document.getElementById("runBtn").addEventListener("click", runDiagnosis);
+document.getElementById("fillBtn").addEventListener("click", () => document.getElementById("situation").value = scenarios[current].sample);
+document.getElementById("sendBtn").addEventListener("click", () => sendChat());
+document.getElementById("chatInput").addEventListener("keydown", e => { if(e.key === "Enter") sendChat(); });
+document.querySelectorAll(".quick button").forEach(b => b.addEventListener("click", () => sendChat(b.dataset.q)));
+renderScenario();
+</script>
+</body>
+</html>
